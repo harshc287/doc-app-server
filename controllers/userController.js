@@ -12,14 +12,10 @@ const register = async (req, res) => {
             where:{email:email}
         })
 
-
                 if(existingUser){
             return res.status(400).send({msg:"User already exists",success:false})
         }
     
-
-
-        
             const salt = await bcrypt.genSalt(10)
             hashedPassword  = await bcrypt.hash(req.body.password,salt)
 
@@ -27,7 +23,6 @@ const register = async (req, res) => {
         const regUser = await User.create({name, email, password:hashedPassword, contactNumber, address})
 
         res.status(200).send({msg: "Registered Successfully", success: true})
-
 
 
     } catch (error) {
@@ -94,7 +89,18 @@ const getUserInfo = async(req, res) => {
     }
 }
 
+const doctorList = async(req, res) => {
+    try {
+        const doctors = await User.findAll({
+            where:{role:'Doctor'},
+            attributes:["id", "name"]
+        })
+        res.status(200).send({doctors:doctors, success:true})
+    } catch (error) {
+        res.status(500).send({msg:"server error"})
+    }
+}
 
 
 
-module.exports = {register, login, getUserInfo}
+module.exports = {register, login, getUserInfo, doctorList}
