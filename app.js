@@ -1,8 +1,8 @@
 const express = require('express')
 require('dotenv').config()
+const cors = require("cors")
 const userRoute = require('./routes/userRoutes')
 const appointmentRoute = require('./routes/appointementRoutes')
-
 
 const {testConnection} = require('./config/db')
 testConnection()
@@ -11,6 +11,13 @@ testConnection()
 const app = express()
 const port = process.env.PORT || 7000
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true
+  })
+);
+
 app.use(express.json())
 
 
@@ -18,6 +25,12 @@ app.use(express.json())
 app.use('/api/user', userRoute)
 app.use('/api/appointment', appointmentRoute)
 
+const path = require("path");
+
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
 
 
 app.get('/', (req, res) => res.send('hello World'))
