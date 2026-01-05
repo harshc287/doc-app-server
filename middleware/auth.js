@@ -26,11 +26,32 @@ try {
 }
 
 function doctor (req, res, next){
-    if(req.user.role === 'Doctor'){
-        next()
-    }else{
-        res.status(200).send({msg:"you are not authorized"})
+
+        if(!req.user){
+        return res.status(401).json({seccess: false, msg:"Unauthorized"})
+
     }
+
+    if(req.user.role === 'Doctor'){
+        return next()
+    }
+    return res.status(403).json({msg:"Doctor access only"})
+    
 }
 
-module.exports  = {auth, doctor}
+function admin(req, res, next){
+    if(!req.user){
+        return res.status(401).json({seccess: false, msg:"Unauthorized"})
+    }
+    if(req.user.role === "Admin"){
+        return next()
+    }
+
+      return res.status(403).json({
+    success: false,
+    msg: "Admin access only"
+  });
+
+}
+
+module.exports  = {auth, doctor, admin}

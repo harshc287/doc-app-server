@@ -3,6 +3,8 @@ require('dotenv').config()
 const cors = require("cors")
 const userRoute = require('./routes/userRoutes')
 const appointmentRoute = require('./routes/appointementRoutes')
+const doctorRoutes = require("./routes/doctorRoutes")
+
 
 const {testConnection} = require('./config/db')
 testConnection()
@@ -32,6 +34,7 @@ app.use(
   express.static(path.join(__dirname, "uploads"))
 );
 
+app.use("/api/doctor", doctorRoutes)
 
 app.get('/', (req, res) => res.send('hello World'))
 app.listen(port, ()=> console.log(`Example app listining on port ${port}`))

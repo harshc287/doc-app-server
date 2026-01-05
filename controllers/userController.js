@@ -124,5 +124,20 @@ const profileImage = async (req, res) => {
     res.status(500).send({msg:"Server error"}) }
 }
 
+const getAllUsers = async(req, res) => {
+  try {
+     const users = await User.findAll({
+      attributes: { exclude: ["password"] }
+    });
 
-module.exports = { register, login, getUserInfo, doctorList, profileImage};
+    res.status(200).json({
+      success: true,
+      users
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, msg: "Server error" });
+  }
+}
+
+
+module.exports = { register, login, getUserInfo, doctorList, profileImage, getAllUsers};
